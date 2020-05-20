@@ -8,23 +8,16 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!--<h1>Henry's Corner</h1>
-    <div id="newsArea">
-        <div id="news">
-            <div id="contentArea">
-                <div id="title">Obama White House portrait unveiling not expected as Trump accuses him of crime</div>
-                <div id="source">CNN politics</div>
-                <div id="publishedAt">Yesterday</div>
-            </div>
-            <div id="imgArea">
-                <img src="img/Trump-Obama.jpg" width=200/>
-            </div>
-        </div>
-    </div>
-    <script src="js/scripts.js"></script>-->
-    <div class="nav" style="text-align: center;">
-        <h1 style="margin: 2px 10px;">Henry's Corner</h1>
+    <!--<script src="js/scripts.js"></script>-->
+    <div class="newsNav" style="text-align: center;">
+        <h1 style="margin: 5px 2px;">Henry's Corner</h1>
         <span style="font-size: 10px;">Not Googleable (or may be it is). I told the developer to do this as "fine print" dammit!</span>
     </div>
+    <h1 id="total" style="margin-top: 20px; margin-bottom: 0px;"></h1>
+    <div class="newsArea" id="newsArea">
+    </div>
+    <button id="loadMore" class="myButton" onclick="loadMore()">Load More</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.3/moment.min.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
