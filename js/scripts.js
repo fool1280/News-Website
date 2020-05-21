@@ -1,6 +1,7 @@
 let newList = []
 let page = 1;
 let sourceTotal = {};
+let newsHtml = "";
 const apiKey = "abcbbb8d05f74e8ea02737181c7d9f1c";
 
 const loadNews = async() => {
@@ -8,6 +9,7 @@ const loadNews = async() => {
     let data = await fetch(url);
     let result = await data.json();
     newList = result.articles;
+    renderSource(newList);
     render(newList);
 }
 
@@ -64,20 +66,21 @@ const renderSource = (list) => {
         }
     })
     console.log("Source", sourceTotal);
-    let newsSource = list.map(item => `<div>
-        <input type="checkbox" id="sourceCheck" value="${item.source.name}" onclick="showContent()">
-        <label for="coding">${item.source.name} (${sourceTotal[item.source.name]})</label>
-    </div>
-    `).sort().filter(inSource).join("");
-    newsSource = `<legend>Choose your source</legend>` + newsSource;   
+    let newsSource = `<legend>Choose your source</legend>`;
+    for (let key in sourceTotal) {
+        newsSource += `<div>
+        <input type="checkbox" id="sourceCheck" value="${key}" onclick="showContent()">
+        <label for="coding">${key} (${sourceTotal[key]})</label>
+        </div>`
+    }
     document.getElementById("sourceTotal").innerHTML = newsSource;
 }
 
 const render = (list) => {
     console.log("You call render and you have list", list);
-    renderSource(list);
     document.getElementById("total").innerHTML = `Total stories: ${list.length*page}`;
-    let newsHtml = list.map(item => `<div id="news">
+    let temp = newsHtml;
+    newsHtml = list.map(item => `<div id="news">
         <div id="contentArea">
             <div id="title"><h2>${item.title}<h2></div>
             <div id="source"><p><i>By ${item.source.name}</i></p></div>
@@ -89,7 +92,7 @@ const render = (list) => {
             <img src="${item.urlToImage}" width=400/>
         </div>
     </div>`).join("");
-    document.getElementById("newsArea").innerHTML = newsHtml;
+    document.getElementById("newsArea").innerHTML = temp + newsHtml;
 }
 
 let loadMore = async() => {
@@ -100,6 +103,7 @@ let loadMore = async() => {
         let result = await data.json();
         newList = result.articles;
         if (typeof newList !== "undefined") {
+            renderSource(newList);
             render(newList)
         } else {
             document.getElementById("loadMore").style.visibility = "hidden";
