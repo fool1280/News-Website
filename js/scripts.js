@@ -38,6 +38,21 @@ function inSource (item) {
         return (true);
     }
 }
+
+function showContent() {
+    let checkArray = {}
+    let checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkArray[checkboxes[i].value] = 0;
+    }
+    console.log(checkArray);
+    let filterSource = newList.filter(item => {
+        console.log(item.source.name, item.source.name in checkArray)
+        return (item.source.name in checkArray);
+    })
+    render(filterSource);
+}
+
 const renderSource = (list) => {
     let count = list.map((item) => {
         if (item.source.name in sourceTotal) {
@@ -50,7 +65,7 @@ const renderSource = (list) => {
     })
     console.log("Source", sourceTotal);
     let newsSource = list.map(item => `<div>
-        <input type="checkbox" id="${item.source.id}" value="${item.source.name}">
+        <input type="checkbox" id="sourceCheck" value="${item.source.name}" onclick="showContent()">
         <label for="coding">${item.source.name} (${sourceTotal[item.source.name]})</label>
     </div>
     `).sort().filter(inSource).join("");
