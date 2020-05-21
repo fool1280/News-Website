@@ -82,7 +82,7 @@ const renderSource = (list) => {
 
 const render = (list) => {
     console.log("You call render and you have list", list);
-    document.getElementById("total").innerHTML = `Total stories: ${list.length*page}`;
+    document.getElementById("total").innerHTML = `Total stories: ${list.length}`;
     newsHtml = list.map(item => `<div id="news">
         <div id="contentArea">
             <div id="title"><h2>${item.title}<h2></div>
