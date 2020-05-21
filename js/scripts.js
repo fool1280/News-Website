@@ -1,9 +1,10 @@
 let newList = []
 let page = 1;
+let sourceTotal = {};
 const apiKey = "abcbbb8d05f74e8ea02737181c7d9f1c";
 
 const loadNews = async() => {
-    let url=`https://newsapi.org/v2/everything?q=world&apiKey=${apiKey}`
+    let url=`https://newsapi.org/v2/everything?sortBy=relevancy&q=world&apiKey=${apiKey}`
     let data = await fetch(url);
     let result = await data.json();
     newList = result.articles;
@@ -28,10 +29,25 @@ let compareTime = (datePublish) => {
         return (secDiff);
     }
 }
+function inSource (item) {
+    if (item in sourceTotal) {
+        sourceTotal[item] += 1;
+        return false;
+    } else {
+        sourceTotal[item] = 1;
+        return (true);
+    }
+}
 
 const render = (list) => {
     console.log("You call render and you have list", list);
     document.getElementById("total").innerHTML = `Total stories: ${list.length*page}`;
+    let newsSource = list.map(item => `<div>
+        <input type="checkbox" id="${item.source.id}" value="${item.source.name}">
+        <label for="coding">${item.source.name}</label>
+    </div>
+    `).sort().filter(inSource).join("");
+    newsSource = `<legend>Choose your source</legend>` + newsSource;
     let newsHtml = list.map(item => `<div id="news">
         <div id="contentArea">
             <div id="title"><h2>${item.title}<h2></div>
@@ -45,12 +61,13 @@ const render = (list) => {
         </div>
     </div>`).join("");
     document.getElementById("newsArea").innerHTML = newsHtml;
+    document.getElementById("sourceTotal").innerHTML = newsSource;
 }
 
 let loadMore = async() => {
     page += 1;
     if (page <= 5) {
-        let url=`https://newsapi.org/v2/everything?q=world&page=${page}&apiKey=${apiKey}`
+        let url=`https://newsapi.org/v2/everything?sortBy=relevancy&q=world&page=${page}&apiKey=${apiKey}`
         let data = await fetch(url);
         let result = await data.json();
         newList = result.articles;
