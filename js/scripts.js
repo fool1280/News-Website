@@ -38,16 +38,20 @@ function inSource (item) {
         return (true);
     }
 }
-
-const render = (list) => {
-    console.log("You call render and you have list", list);
-    document.getElementById("total").innerHTML = `Total stories: ${list.length*page}`;
+const renderSource = (list) => {
     let newsSource = list.map(item => `<div>
         <input type="checkbox" id="${item.source.id}" value="${item.source.name}">
         <label for="coding">${item.source.name}</label>
     </div>
     `).sort().filter(inSource).join("");
-    newsSource = `<legend>Choose your source</legend>` + newsSource;
+    newsSource = `<legend>Choose your source</legend>` + newsSource;   
+    document.getElementById("sourceTotal").innerHTML = newsSource;
+}
+
+const render = (list) => {
+    console.log("You call render and you have list", list);
+    renderSource(list);
+    document.getElementById("total").innerHTML = `Total stories: ${list.length*page}`;
     let newsHtml = list.map(item => `<div id="news">
         <div id="contentArea">
             <div id="title"><h2>${item.title}<h2></div>
@@ -61,7 +65,6 @@ const render = (list) => {
         </div>
     </div>`).join("");
     document.getElementById("newsArea").innerHTML = newsHtml;
-    document.getElementById("sourceTotal").innerHTML = newsSource;
 }
 
 let loadMore = async() => {
