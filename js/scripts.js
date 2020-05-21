@@ -1,6 +1,7 @@
 let newList = []
 let page = 1;
 let sourceTotal = {};
+let checkArray = {}
 let newsHtml = "";
 const apiKey = "abcbbb8d05f74e8ea02737181c7d9f1c";
 
@@ -42,10 +43,13 @@ function inSource (item) {
 }
 
 function showContent() {
-    let checkArray = {}
     let checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+    let unCheckbox = document.querySelectorAll('input[type=checkbox]:not(:checked)')
     for (var i = 0; i < checkboxes.length; i++) {
         checkArray[checkboxes[i].value] = 0;
+    }
+    for (var i = 0; i < unCheckbox.length; i++) {
+        delete (checkArray[unCheckbox[i].value]);
     }
     console.log(checkArray);
     let filterSource = newList.filter(item => {
@@ -69,7 +73,7 @@ const renderSource = (list) => {
     let newsSource = `<legend>Choose your source</legend>`;
     for (let key in sourceTotal) {
         newsSource += `<div>
-        <input type="checkbox" id="sourceCheck" value="${key}" onclick="showContent()">
+        <input type="checkbox" id="sourceCheck" value="${key}" onclick="showContent()" checked>
         <label for="coding">${key} (${sourceTotal[key]})</label>
         </div>`
     }
@@ -79,7 +83,6 @@ const renderSource = (list) => {
 const render = (list) => {
     console.log("You call render and you have list", list);
     document.getElementById("total").innerHTML = `Total stories: ${list.length*page}`;
-    let temp = newsHtml;
     newsHtml = list.map(item => `<div id="news">
         <div id="contentArea">
             <div id="title"><h2>${item.title}<h2></div>
@@ -92,7 +95,7 @@ const render = (list) => {
             <img src="${item.urlToImage}" width=400/>
         </div>
     </div>`).join("");
-    document.getElementById("newsArea").innerHTML = temp + newsHtml;
+    document.getElementById("newsArea").innerHTML = newsHtml;
 }
 
 let loadMore = async() => {
@@ -101,7 +104,8 @@ let loadMore = async() => {
         let url=`https://newsapi.org/v2/everything?sortBy=relevancy&q=world&page=${page}&apiKey=${apiKey}`
         let data = await fetch(url);
         let result = await data.json();
-        newList = result.articles;
+        addNewList = result.articles;
+        newList = newList.concat(addNewList);
         if (typeof newList !== "undefined") {
             renderSource(newList);
             render(newList)
