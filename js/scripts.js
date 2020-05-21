@@ -32,16 +32,26 @@ let compareTime = (datePublish) => {
 function inSource (item) {
     if (item in sourceTotal) {
         sourceTotal[item] += 1;
-        return false;
+        return (false);
     } else {
         sourceTotal[item] = 1;
         return (true);
     }
 }
 const renderSource = (list) => {
+    let count = list.map((item) => {
+        if (item.source.name in sourceTotal) {
+            sourceTotal[item.source.name] += 1;
+            return (false);
+        } else {
+            sourceTotal[item.source.name] = 1;
+            return (true);
+        }
+    })
+    console.log("Source", sourceTotal);
     let newsSource = list.map(item => `<div>
         <input type="checkbox" id="${item.source.id}" value="${item.source.name}">
-        <label for="coding">${item.source.name}</label>
+        <label for="coding">${item.source.name} (${sourceTotal[item.source.name]})</label>
     </div>
     `).sort().filter(inSource).join("");
     newsSource = `<legend>Choose your source</legend>` + newsSource;   
